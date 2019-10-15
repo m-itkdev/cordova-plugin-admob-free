@@ -60,6 +60,10 @@
 @property (nonatomic, retain) NSString* gender;
 @property (nonatomic, retain) NSString* forChild;
 
+//-> by m.itakura
+@property (assign) float bannerPosX, bannerPosY;
+//<- by m.itakura
+
 - (void) setOptions:(CDVInvokedUrlCommand *)command;
 
 - (void)createBannerView:(CDVInvokedUrlCommand *)command;

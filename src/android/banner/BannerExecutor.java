@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import android.view.Gravity;    //by m.itakura
+
 import com.google.android.gms.ads.AdView;
 
 import org.apache.cordova.CallbackContext;
@@ -196,6 +198,7 @@ public class BannerExecutor extends AbstractExecutor {
                         if (adViewLayout == null) {
                             adViewLayout = new RelativeLayout(cordova.getActivity());
                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                            adViewLayout.setGravity(Gravity.CENTER);    //バナーは中央寄せ固定 by m.itakura
                             try {
                                 ((ViewGroup) (((View) webView.getClass().getMethod("getView").invoke(webView)).getParent())).addView(adViewLayout, params);
                             } catch (Exception e) {

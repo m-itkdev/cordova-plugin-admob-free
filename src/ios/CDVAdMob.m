@@ -43,6 +43,10 @@
 
 @synthesize rewardedVideoLock, isRewardedVideoLoading;
 
+//-> by m.itakura
+@synthesize bannerPosX, bannerPosY;
+//<- by m.itakura
+
 #define DEFAULT_BANNER_ID    @"ca-app-pub-3940256099942544/2934735716"
 #define DEFAULT_INTERSTITIAL_ID @"ca-app-pub-3940256099942544/4411468910"
 #define DEFAULT_REWARD_VIDEO_ID @"ca-app-pub-3940256099942544/1712485313"
@@ -88,8 +92,10 @@
     offsetTopBar = false;
     isTesting = false;
 
-    autoShow = true;
-    autoShowBanner = true;
+    // autoShow = true;
+    // autoShowBanner = true;
+    autoShow = false;           // by m.itakura
+    autoShowBanner = false;     // by m.itakura
     autoShowInterstitial = false;
     autoShowRewardVideo = false;
 
@@ -101,6 +107,11 @@
 
     isRewardedVideoLoading = false;
     rewardedVideoLock = nil;
+
+    //-> by m.itakura
+    bannerPosX = 0.0;
+    bannerPosY = 0.0;
+    //<- by m.itakura
 
     srand((unsigned int)time(NULL));
 
@@ -147,11 +158,12 @@
         [self __createBanner];
     }
 
-    if(autoShowBanner) {
-        bannerShow = autoShowBanner;
+    // comment out by m.itakura
+    // if(autoShowBanner) {
+    //     bannerShow = autoShowBanner;
 
-        [self __showAd:YES];
-    }
+    //     [self __showAd:YES];
+    // }
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
@@ -543,6 +555,8 @@
 
         [self resizeViews];
 
+        self.bannerView.hidden = YES;   // by m.itakura
+
         [self.bannerView loadRequest:[self __buildAdRequest]];
     }
 }
@@ -602,6 +616,10 @@
         UIView* parentView = self.bannerOverlap ? self.webView : [self.webView superview];
         [parentView addSubview:self.bannerView];
         [parentView bringSubviewToFront:self.bannerView];
+        //-> by m.itakura
+        bannerPosX = parentView.frame.size.width / 2;
+        bannerPosY = parentView.frame.size.height / 2 + 20;
+        //<- by m.itakura
         [self resizeViews];
 
         self.bannerIsVisible = YES;
@@ -611,6 +629,10 @@
 
         self.bannerIsVisible = NO;
     }
+
+    //-> by m.itakura
+    self.bannerView.hidden = NO;
+    //<- by m.itakura
 }
 
 - (void) __cycleInterstitial {
@@ -795,6 +817,10 @@
             //Hide safe area background if visibile and banner ad does not exist
             _safeAreaBackgroundView.hidden = true;
         }
+
+        //-> by m.itakura
+        self.bannerView.center = CGPointMake(bannerPosX, bannerPosY);
+        //<- by m.itakura
     } else {
         //Hide safe area background if visibile and banner ad does not exist
         _safeAreaBackgroundView.hidden = true;
